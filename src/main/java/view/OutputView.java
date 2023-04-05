@@ -17,29 +17,29 @@ public class OutputView {
     public static final String INPUT_PLAYER_BETTING_MESSAGE = "\n%s의 배팅 금액은?\n";
     public static final String FINAL_RESULT_HEADER_MESSAGE = "\n## 최종 수익";
 
-    public void printInputPlayerNameMessage() {
+    public static void printInputPlayerNameMessage() {
         System.out.println(INPUT_PLAYER_NAME_MESSAGE);
     }
 
-    public void printSetUpResult(UserDto dealerSetUpDataDto, List<UserDto> playerGameDataDtos) {
+    public static void printSetUpResult(UserDto dealerSetUpDataDto, List<UserDto> playerGameDataDtos) {
         printSetUpCompleteMessage(playerGameDataDtos);
         printUserCards(dealerSetUpDataDto);
         printAllUserCards(playerGameDataDtos);
     }
 
-    public void printAskOneMoreCardMessage(UserDto userDto) {
+    public static void printAskOneMoreCardMessage(UserDto userDto) {
         System.out.printf(ASK_ONE_MORE_CARD_MESSAGE, userDto.getName());
     }
 
-    public void printPlayerDrawResult(UserDto userDto) {
+    public static void printPlayerDrawResult(UserDto userDto) {
         printUserCards(userDto);
     }
 
-    public void printDealerDrawResult(int dealerDrawCount) {
+    public static void printDealerDrawResult(int dealerDrawCount) {
         System.out.printf(DEALER_DRAW_RESULT_MESSAGE, dealerDrawCount);
     }
 
-    public void printUserCardsWithScore(UserDto userDto) {
+    public static void printUserCardsWithScore(UserDto userDto) {
         String name = userDto.getName();
         String cards = String.join(", ", userDto.getCards());
         int score = userDto.getScore();
@@ -47,7 +47,7 @@ public class OutputView {
         System.out.printf(USER_CARDS_WITH_SCORE_FORMAT, name, cards, score);
     }
 
-    private void printSetUpCompleteMessage(List<UserDto> playerGameDataDtos) {
+    private static void printSetUpCompleteMessage(List<UserDto> playerGameDataDtos) {
         List<String> playerNames = playerGameDataDtos.stream()
                 .map(UserDto::getName)
                 .collect(Collectors.toList());
@@ -55,33 +55,33 @@ public class OutputView {
         System.out.printf(SETUP_COMPLETE_MESSAGE, String.join(", ", playerNames));
     }
 
-    private void printAllUserCards(List<UserDto> userDtos) {
+    private static void printAllUserCards(List<UserDto> userDtos) {
         for (UserDto userDto : userDtos) {
             printUserCards(userDto);
         }
     }
 
-    private void printUserCards(UserDto userDto) {
+    private static void printUserCards(UserDto userDto) {
         String name = userDto.getName();
         String cards = String.join(", ", userDto.getCards());
 
         System.out.printf(USER_CARD_FORMAT, name, cards);
     }
 
-    public void printInputPlayerBettingMessage(UserDto userDto) {
+    public static void printInputPlayerBettingMessage(UserDto userDto) {
         System.out.printf(INPUT_PLAYER_BETTING_MESSAGE, userDto.getName());
     }
 
-    public void printFinalResultHeaderMessage() {
+    public static void printFinalResultHeaderMessage() {
         System.out.println(FINAL_RESULT_HEADER_MESSAGE);
     }
 
-    public void printPlayerPrizeResult(List<PrizeResultDto> prizeResultDtos) {
+    public static void printPlayerPrizeResult(List<PrizeResultDto> prizeResultDtos) {
         prizeResultDtos.forEach(prizeResultDto ->
                 System.out.printf("%s: %d\n", prizeResultDto.getName(), prizeResultDto.getPrize()));
     }
 
-    public void printAllUserCardsWithScore(List<UserDto> allPlayerDtos) {
-        allPlayerDtos.forEach(this::printUserCardsWithScore);
+    public static void printAllUserCardsWithScore(List<UserDto> allPlayerDtos) {
+        allPlayerDtos.forEach(OutputView::printUserCardsWithScore);
     }
 }

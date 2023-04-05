@@ -9,20 +9,20 @@ import java.util.stream.Collectors;
 
 public class InputView {
     public static final String DELIMITER = ",";
-    private final Scanner scanner = new Scanner(System.in);
+    private static final Scanner scanner = new Scanner(System.in);
 
-    public List<String> readPlayersName() {
+    public static List<String> readPlayersName() {
         List<String> playersName = Arrays.asList(scanner.nextLine().split(DELIMITER));
         return playersName.stream()
                 .map(String::strip)
                 .collect(Collectors.toList());
     }
 
-    public DrawCommand readDrawCommand() {
+    public static DrawCommand readDrawCommand() {
         return DrawCommand.of(scanner.nextLine());
     }
 
-    public int readPlayerBetting() {
+    public static int readPlayerBetting() {
         return Integer.parseInt(scanner.nextLine());
     }
 }

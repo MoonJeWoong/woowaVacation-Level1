@@ -15,33 +15,31 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public final class BlackjackGameController {
-    private final InputView inputView;
-    private final OutputView outputView;
 
-    public BlackjackGameController(InputView inputView, OutputView outputView) {
-        this.inputView = inputView;
-        this.outputView = outputView;
-    }
+    private final BlackjackGame blackjackGame;
+    private final PlayerBets playerBets;
 
-    public void run() {
-        BlackjackGame blackjackGame = setUpBlackjackGame();
-        PlayerBets playerBets = setUpPlayerBets(blackjackGame);
-
-        playGame(blackjackGame, playerBets);
-    }
-
-    private PlayerBets setUpPlayerBets(BlackjackGame blackjackGame) {
-        List<UserDto> allPlayerDtos = blackjackGame.getAllPlayerDtos();
-        return new PlayerBets(blackjackGame.getAllPlayerNames(), readPlayerBets(allPlayerDtos));
+    public BlackjackGameController() {
+        blackjackGame = setUpBlackjackGame();
+        playerBets = setUpPlayerBets();
     }
 
     private BlackjackGame setUpBlackjackGame() {
         return new BlackjackGame(new Players(readPlayerNames()), new ShuffleDeckGenerator());
     }
 
+    private PlayerBets setUpPlayerBets() {
+        List<UserDto> allPlayerDtos = blackjackGame.getAllPlayerDtos();
+        return new PlayerBets(blackjackGame.getAllPlayerNames(), readPlayerBets(allPlayerDtos));
+    }
+
+    public void run() {
+        playGame();
+    }
+
     private List<String> readPlayerNames() {
-        outputView.printInputPlayerNameMessage();
-        return inputView.readPlayersName();
+        OutputView.printInputPlayerNameMessage();
+        return InputView.readPlayersName();
     }
 
     private List<Integer> readPlayerBets(List<UserDto> allPlayerDtos) {
@@ -51,79 +49,82 @@ public final class BlackjackGameController {
     }
 
     private int readPlayerBet(UserDto playerDto) {
-        outputView.printInputPlayerBettingMessage(playerDto);
-        return inputView.readPlayerBetting();
+        OutputView.printInputPlayerBettingMessage(playerDto);
+        return InputView.readPlayerBetting();
     }
 
-    private void playGame(BlackjackGame blackjackGame, PlayerBets playerBets) {
-        showSetUpResult(blackjackGame.getDealerSetUpDto(), blackjackGame.getAllPlayerDtos());
-        progressPlayersTurn(blackjackGame);
-        progressDealerTurn(blackjackGame);
-        showUserCardResults(blackjackGame);
-        showFinalProfit(blackjackGame, playerBets);
+    private void playGame() {
+        showSetUpResult();
+        progressPlayersTurn();
+        progressDealerTurn();
+        showUserCardResults();
+        showFinalProfit();
     }
 
-    private void showSetUpResult(UserDto dealerSetUpData, List<UserDto> playerGameData) {
-        outputView.printSetUpResult(dealerSetUpData, playerGameData);
+    private void showSetUpResult() {
+        UserDto dealerSetUpData = blackjackGame.getDealerSetUpDto();
+        List<UserDto> playerGameData = blackjackGame.getAllPlayerDtos();
+        OutputView.printSetUpResult(dealerSetUpData, playerGameData);
     }
 
-    private void progressPlayersTurn(BlackjackGame blackjackGame) {
+    private void progressPlayersTurn() {
         while (blackjackGame.hasReadyPlayer()) {
-            progressPlayerTurn(blackjackGame);
+            progressPlayerTurn();
         }
     }
 
-    private void progressPlayerTurn(BlackjackGame blackjackGame) {
+    private void progressPlayerTurn() {
+        // Todo: blackjackGame 객체에서는 Name 객체를 반환, Dto에서 Name을 벗겨내도록 리팩토링할 것
         UserDto readyPlayerGameDataDto = blackjackGame.getReadyPlayerDto();
         Name playerName = new Name(readyPlayerGameDataDto.getName());
         while (!blackjackGame.hasPlayerResult(playerName) && isPlayerInputDraw(readyPlayerGameDataDto)) {
-            drawCardForPlayer(blackjackGame, playerName);
+            drawCardForPlayer(playerName);
         }
         if (!blackjackGame.hasPlayerResult(playerName)) {
-            doStayForPlayer(blackjackGame, playerName);
+            doStayForPlayer(playerName);
         }
     }
 
     private boolean isPlayerInputDraw(UserDto readyPlayerGameDataDto) {
-        outputView.printAskOneMoreCardMessage(readyPlayerGameDataDto);
-        DrawCommand inputCommand = inputView.readDrawCommand();
+        OutputView.printAskOneMoreCardMessage(readyPlayerGameDataDto);
+        DrawCommand inputCommand = InputView.readDrawCommand();
         return DrawCommand.DRAW.equals(inputCommand);
     }
 
-    private void drawCardForPlayer(BlackjackGame blackjackGame, Name playerName) {
+    private void drawCardForPlayer(Name playerName) {
         blackjackGame.drawOneMoreCardForPlayer(playerName);
         showDrawResult(blackjackGame.getPlayerDtoByName(playerName));
     }
 
-    private void doStayForPlayer(BlackjackGame blackjackGame, Name playerName) {
+    private void doStayForPlayer(Name playerName) {
         blackjackGame.doStay(playerName);
         showDrawResult(blackjackGame.getPlayerDtoByName(playerName));
     }
 
     private void showDrawResult(UserDto userDto) {
-        outputView.printPlayerDrawResult(userDto);
+        OutputView.printPlayerDrawResult(userDto);
     }
 
-    private void progressDealerTurn(BlackjackGame blackjackGame) {
+    private void progressDealerTurn() {
         blackjackGame.drawCardUntilDealerFinished();
 
         if (blackjackGame.getDealerDrawCount() > 0) {
-            outputView.printDealerDrawResult(blackjackGame.getDealerDrawCount());
+            OutputView.printDealerDrawResult(blackjackGame.getDealerDrawCount());
         }
     }
 
-    private void showUserCardResults(BlackjackGame blackjackGame) {
+    private void showUserCardResults() {
         UserDto dealerDto = blackjackGame.getDealerDto();
         List<UserDto> allPlayerDtos = blackjackGame.getAllPlayerDtos();
 
-        outputView.printUserCardsWithScore(dealerDto);
-        outputView.printAllUserCardsWithScore(allPlayerDtos);
+        OutputView.printUserCardsWithScore(dealerDto);
+        OutputView.printAllUserCardsWithScore(allPlayerDtos);
     }
 
-    private void showFinalProfit(BlackjackGame blackjackGame, PlayerBets playerBets) {
+    private void showFinalProfit() {
         GameResult gameResult = blackjackGame.calculateGameResult(playerBets);
 
-        outputView.printFinalResultHeaderMessage();
-        outputView.printPlayerPrizeResult(gameResult.getPrizeResultDtosForAllUsers());
+        OutputView.printFinalResultHeaderMessage();
+        OutputView.printPlayerPrizeResult(gameResult.getPrizeResultDtosForAllUsers());
     }
 }
