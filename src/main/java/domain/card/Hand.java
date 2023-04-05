@@ -30,26 +30,6 @@ public final class Hand {
         return sumScore;
     }
 
-    public List<Card> getCards() {
-        return new ArrayList<>(cards);
-    }
-
-    public boolean isBust() {
-        return calculateScore().isOverMax();
-    }
-
-    public boolean isBlackjack() {
-        return calculateScore().isMax() && hasTwoCards();
-    }
-
-    public boolean isEmpty() {
-        return cards.isEmpty();
-    }
-
-    public boolean isDealerHit() {
-        return calculateScore().isLessThanOrEqual(maxDealerHit);
-    }
-
     private Score sum() {
         return cards.stream()
                 .map(Card::getScore)
@@ -62,7 +42,23 @@ public final class Hand {
                 .count();
     }
 
-    private boolean hasTwoCards() {
-        return cards.size() == 2;
+    public boolean isBust() {
+        return calculateScore().isOverMax();
+    }
+
+    public boolean isBlackjack() {
+        return calculateScore().isMax() && cards.size() == 2;
+    }
+
+    public boolean isEmpty() {
+        return cards.isEmpty();
+    }
+
+    public boolean isDealerHit() {
+        return calculateScore().isLessThanOrEqual(maxDealerHit);
+    }
+
+    public List<Card> getCards() {
+        return new ArrayList<>(cards);
     }
 }
