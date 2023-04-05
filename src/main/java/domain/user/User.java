@@ -74,4 +74,8 @@ public abstract class User {
     }
 
     public abstract double getProfitRatio();
+
+    public abstract int drawCount();
+
+    public abstract List<Card> getOnlyFirstCard();
 }

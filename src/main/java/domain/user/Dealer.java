@@ -17,10 +17,12 @@ public final class Dealer extends User {
         throw new DealerHasNoProfitRatioException();
     }
 
+    @Override
     public int drawCount() {
         return getCards().size() - 2;
     }
 
+    @Override
     public List<Card> getOnlyFirstCard() {
         return getCards().subList(0, 1);
     }
