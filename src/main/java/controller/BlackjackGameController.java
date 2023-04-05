@@ -2,6 +2,7 @@ package controller;
 
 import domain.card.ShuffleDeckGenerator;
 import domain.command.DrawCommand;
+import domain.dto.PrizeResultDto;
 import domain.dto.UserDto;
 import domain.game.BlackjackGame;
 import domain.game.GameResult;
@@ -15,6 +16,7 @@ import view.OutputView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public final class BlackjackGameController {
@@ -37,12 +39,12 @@ public final class BlackjackGameController {
     }
 
     private PlayerBets setUpPlayerBets() {
-        List<UserDto> allPlayerDtos = getAllPlayerDtos();
+        List<UserDto> allPlayerDtos = makeAllPlayerDtos();
 
         return new PlayerBets(blackjackGame.getAllPlayerNames(), readPlayerBets(allPlayerDtos));
     }
 
-    private List<UserDto> getAllPlayerDtos() {
+    private List<UserDto> makeAllPlayerDtos() {
         List<UserDto> allPlayerDtos = new ArrayList<>();
         List<Player> allPlayers = blackjackGame.getAllPlayers();
         allPlayers.forEach(player -> allPlayerDtos.add(new UserDto(player)));
@@ -72,7 +74,7 @@ public final class BlackjackGameController {
     private void showSetUpResult() {
         Dealer dealer = blackjackGame.getDealer();
         UserDto setUpDealerDto = new UserDto(dealer.getName(), dealer.getScore(), dealer.getOnlyFirstCard());
-        List<UserDto> allPlayerDtos = getAllPlayerDtos();
+        List<UserDto> allPlayerDtos = makeAllPlayerDtos();
         OutputView.printSetUpResult(setUpDealerDto, allPlayerDtos);
     }
 
@@ -123,7 +125,7 @@ public final class BlackjackGameController {
 
     private void showUserCardResults() {
         UserDto dealerDto = new UserDto(blackjackGame.getDealer());
-        List<UserDto> allPlayerDtos = getAllPlayerDtos();
+        List<UserDto> allPlayerDtos = makeAllPlayerDtos();
 
         OutputView.printUserCardsWithScore(dealerDto);
         OutputView.printAllUserCardsWithScore(allPlayerDtos);
@@ -131,8 +133,18 @@ public final class BlackjackGameController {
 
     private void showFinalProfit() {
         GameResult gameResult = blackjackGame.calculateGameResult(playerBets);
+        List<PrizeResultDto> prizeResultDtos = makePrizeResultDtos(gameResult.getUserPrizes());
 
         OutputView.printFinalResultHeaderMessage();
-        OutputView.printPlayerPrizeResult(gameResult.getPrizeResultDtosForAllUsers());
+        OutputView.printPlayerPrizeResult(prizeResultDtos);
+    }
+
+    private List<PrizeResultDto> makePrizeResultDtos(Map<Name, Integer> userPrizes) {
+        List<PrizeResultDto> prizeResultDtos = new ArrayList<>();
+
+        for(Map.Entry<Name, Integer> prizeResult : userPrizes.entrySet()) {
+            prizeResultDtos.add(new PrizeResultDto(prizeResult.getKey(), prizeResult.getValue()));
+        }
+        return prizeResultDtos;
     }
 }

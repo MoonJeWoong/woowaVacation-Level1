@@ -14,6 +14,8 @@ import java.util.Map;
 
 public final class GameResult {
     public static final int DEALER_INITIAL_PRIZE = 0;
+    public static final int PLAYER_DEFAULT_PRIZE = 0;
+
     private final Map<Name, Integer> userPrizes = new LinkedHashMap<>();
 
     public GameResult(Name dealerName, List<Name> playerNames, PlayerBets bets) {
@@ -28,16 +30,17 @@ public final class GameResult {
 
     private void judgeWinner(Dealer dealer, Players players) {
         for (Name playerName : players.getAllNames()) {
-            compareDealerStatusWithPlayer(dealer, players.findPlayerByName(playerName));
+            compareDealerStateWithPlayer(dealer, players.findPlayerByName(playerName));
         }
     }
 
-    private void compareDealerStatusWithPlayer(Dealer dealer, Player player) {
+    private void compareDealerStateWithPlayer(Dealer dealer, Player player) {
         if (dealer.isBust()) {
             userPrizes.put(player.getName(), calculatePrize(player));
             return;
         }
         if (dealer.isBlackjack() && player.isBlackjack()) {
+            userPrizes.put(player.getName(), PLAYER_DEFAULT_PRIZE);
             return;
         }
         compareScore(dealer, player);
@@ -49,7 +52,7 @@ public final class GameResult {
             return;
         }
         if (player.hasSameScore(dealer)) {
-            userPrizes.put(player.getName(), 0);
+            userPrizes.put(player.getName(), PLAYER_DEFAULT_PRIZE);
             return;
         }
         userPrizes.put(player.getName(), calculatePrize(player));
@@ -65,13 +68,7 @@ public final class GameResult {
         return (int) Math.ceil(userPrizes.get(player.getName()) * player.getProfitRatio());
     }
 
-    public List<PrizeResultDto> getPrizeResultDtosForAllUsers() {
-        List<PrizeResultDto> prizeResultDtos = new ArrayList<>();
-
-        for(Map.Entry<Name, Integer> prizeResult : userPrizes.entrySet()) {
-            prizeResultDtos.add(new PrizeResultDto(prizeResult.getKey(), prizeResult.getValue()));
-        }
-
-        return prizeResultDtos;
+    public Map<Name, Integer> getUserPrizes() {
+        return userPrizes;
     }
 }
