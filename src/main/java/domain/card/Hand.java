@@ -22,6 +22,26 @@ public final class Hand {
         return new Hand(newCards);
     }
 
+    public boolean hasLessScore(Hand other) {
+        return calculateScore().isLessThan(other.calculateScore());
+    }
+
+    public boolean hasSameScore(Hand other) {
+        return calculateScore().equals(other.calculateScore());
+    }
+
+    public boolean isBust() {
+        return calculateScore().isOverMax();
+    }
+
+    public boolean isBlackjack() {
+        return calculateScore().isMax() && cards.size() == 2;
+    }
+
+    public boolean isDealerHit() {
+        return calculateScore().isLessThanOrEqual(maxDealerHit);
+    }
+
     public Score calculateScore() {
         Score sumScore = sum();
         if(sumScore.isOverMax()) {
@@ -42,20 +62,8 @@ public final class Hand {
                 .count();
     }
 
-    public boolean isBust() {
-        return calculateScore().isOverMax();
-    }
-
-    public boolean isBlackjack() {
-        return calculateScore().isMax() && cards.size() == 2;
-    }
-
     public boolean isEmpty() {
         return cards.isEmpty();
-    }
-
-    public boolean isDealerHit() {
-        return calculateScore().isLessThanOrEqual(maxDealerHit);
     }
 
     public List<Card> getCards() {

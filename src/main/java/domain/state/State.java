@@ -21,6 +21,14 @@ public abstract class State {
 
     public abstract double getProfitRatio();
 
+    public boolean hasLessScore(State other) {
+        return hand.hasLessScore(other.hand);
+    }
+
+    public boolean hasSameScore(State other) {
+        return hand.hasSameScore(other.hand);
+    }
+
     public final boolean isBust() {
         return hand.isBust();
     }

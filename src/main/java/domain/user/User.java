@@ -21,24 +21,24 @@ public abstract class User {
         cards.forEach(this::receiveCard);
     }
 
+    public void receiveCard(Card card) {
+        state = state.draw(card);
+    }
+
     public final boolean isName(Name playerName) {
-        return getName().equals(playerName);
+        return name.equals(playerName);
     }
 
     public final boolean hasLessScore(User other) {
-        return getScore().isLessThan(other.getScore());
+        return state.hasLessScore(other.state);
     }
 
     public final boolean hasSameScore(User other) {
-        return getScore().equals(other.getScore());
+        return state.hasSameScore(other.state);
     }
 
     public final UserDto getUserDto() {
         return new UserDto(getName(), getScore(), getCards());
-    }
-
-    public void receiveCard(Card card) {
-        state = state.draw(card);
     }
 
     public void doStay() {

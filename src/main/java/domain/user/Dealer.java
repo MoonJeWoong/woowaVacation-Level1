@@ -13,7 +13,7 @@ public final class Dealer extends User {
     }
 
     @Override
-    public final double getProfitRatio() {
+    public double getProfitRatio() {
         throw new DealerHasNoProfitRatioException();
     }
 
