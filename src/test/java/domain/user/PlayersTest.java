@@ -3,7 +3,6 @@ package domain.user;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import domain.dto.UserDto;
 import exception.DuplicatedPlayerNameException;
 import exception.InputPlayerNameSizeException;
 import org.junit.jupiter.api.DisplayName;
@@ -19,9 +18,9 @@ public class PlayersTest {
         List<String> singleName = List.of("pobi");
 
         Players players = new Players(singleName);
-        UserDto userDto = players.getPlayerDtoByName(new Name("pobi"));
+        List<Player> allPlayers = players.getAllPlayers();
 
-        assertThat(userDto.getName()).isEqualTo("pobi");
+        assertThat(allPlayers.size()).isEqualTo(1);
     }
 
     @Test

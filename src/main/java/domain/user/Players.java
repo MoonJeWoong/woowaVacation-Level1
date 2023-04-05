@@ -3,7 +3,6 @@ package domain.user;
 import domain.card.Card;
 import domain.card.GameDeck;
 import domain.card.Score;
-import domain.dto.UserDto;
 import exception.DuplicatedPlayerNameException;
 import exception.InputPlayerNameSizeException;
 import exception.NoPlayerHasThatNameException;
@@ -83,25 +82,22 @@ public final class Players {
                 .orElseThrow(NoPlayerHasThatNameException::new);
     }
 
-    public UserDto getReadyPlayerDto() {
+    public Name getReadyPlayerName() {
         return players.stream()
                 .filter(player -> !player.hasResult())
-                .map(Player::getUserDto)
+                .map(Player::getName)
                 .findFirst()
                 .orElseThrow(ThereIsNoPlayerUnfinishedException::new);
     }
 
-    public UserDto getPlayerDtoByName(Name name) {
+    public Player getPlayerByName(Name playerName) {
         return players.stream()
-                .filter(player -> player.isName(name))
-                .map(Player::getUserDto)
+                .filter(player -> player.isName(playerName))
                 .findFirst()
                 .orElseThrow(NoPlayerHasThatNameException::new);
     }
 
-    public List<UserDto> getAllPlayerDtos() {
-        List<UserDto> playerDtos = new ArrayList<>();
-        players.forEach(player -> playerDtos.add(player.getUserDto()));
-        return playerDtos;
+    public List<Player> getAllPlayers() {
+        return players;
     }
 }

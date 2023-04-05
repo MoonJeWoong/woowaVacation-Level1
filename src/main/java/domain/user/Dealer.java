@@ -1,7 +1,6 @@
 package domain.user;
 
 import domain.card.Card;
-import domain.dto.UserDto;
 import domain.state.DealerReady;
 import exception.DealerHasNoProfitRatioException;
 
@@ -25,9 +24,5 @@ public final class Dealer extends User {
     @Override
     public List<Card> getOnlyFirstCard() {
         return getCards().subList(0, 1);
-    }
-
-    public UserDto getDealerSetUpDto() {
-        return new UserDto(getName(), getScore(), getOnlyFirstCard());
     }
 }

@@ -21,10 +21,10 @@ public class OutputView {
         System.out.println(INPUT_PLAYER_NAME_MESSAGE);
     }
 
-    public static void printSetUpResult(UserDto dealerSetUpDataDto, List<UserDto> playerGameDataDtos) {
-        printSetUpCompleteMessage(playerGameDataDtos);
-        printUserCards(dealerSetUpDataDto);
-        printAllUserCards(playerGameDataDtos);
+    public static void printSetUpResult(UserDto setUpDealerDto, List<UserDto> allPlayerDtos) {
+        printSetUpCompleteMessage(allPlayerDtos);
+        printUserCards(setUpDealerDto);
+        printAllUserCards(allPlayerDtos);
     }
 
     public static void printAskOneMoreCardMessage(UserDto userDto) {
@@ -47,8 +47,8 @@ public class OutputView {
         System.out.printf(USER_CARDS_WITH_SCORE_FORMAT, name, cards, score);
     }
 
-    private static void printSetUpCompleteMessage(List<UserDto> playerGameDataDtos) {
-        List<String> playerNames = playerGameDataDtos.stream()
+    private static void printSetUpCompleteMessage(List<UserDto> allPlayerDtos) {
+        List<String> playerNames = allPlayerDtos.stream()
                 .map(UserDto::getName)
                 .collect(Collectors.toList());
 

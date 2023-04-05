@@ -1,11 +1,11 @@
 package domain.game;
 
-import domain.user.PlayerBets;
 import domain.card.DeckGenerator;
 import domain.card.GameDeck;
-import domain.dto.UserDto;
 import domain.user.Dealer;
 import domain.user.Name;
+import domain.user.Player;
+import domain.user.PlayerBets;
 import domain.user.Players;
 
 import java.util.List;
@@ -58,37 +58,31 @@ public final class BlackjackGame {
         return gameResult;
     }
 
+    public List<Player> getAllPlayers() {
+        return players.getAllPlayers();
+    }
+
     public List<Name> getAllPlayerNames() {
         return players.getAllNames();
     }
 
-    public int getDealerDrawCount() {
-        return dealer.drawCount();
+    public Name getReadyPlayerName() {
+        return players.getReadyPlayerName();
+    }
+
+    public Player getPlayerByName(Name playerName) {
+        return players.getPlayerByName(playerName);
+    }
+
+    public Dealer getDealer() {
+        return dealer;
     }
 
     private Name getDealerName() {
         return dealer.getName();
     }
 
-    public UserDto getDealerSetUpDto() {
-        return dealer.getDealerSetUpDto();
+    public int getDealerDrawCount() {
+        return dealer.drawCount();
     }
-
-    public UserDto getDealerDto() {
-        return dealer.getUserDto();
-    }
-
-    public UserDto getReadyPlayerDto() {
-        return players.getReadyPlayerDto();
-    }
-
-    public UserDto getPlayerDtoByName(Name playerName) {
-        return players.getPlayerDtoByName(playerName);
-    }
-
-    public List<UserDto> getAllPlayerDtos() {
-        return players.getAllPlayerDtos();
-    }
-
-
 }

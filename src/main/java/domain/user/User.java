@@ -2,7 +2,6 @@ package domain.user;
 
 import domain.card.Card;
 import domain.card.Score;
-import domain.dto.UserDto;
 import domain.state.Ready;
 import domain.state.State;
 
@@ -35,10 +34,6 @@ public abstract class User {
 
     public final boolean hasSameScore(User other) {
         return state.hasSameScore(other.state);
-    }
-
-    public final UserDto getUserDto() {
-        return new UserDto(getName(), getScore(), getCards());
     }
 
     public void doStay() {
