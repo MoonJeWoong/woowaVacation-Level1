@@ -18,12 +18,6 @@ public final class King extends Piece {
                 isMovableDistance(path.size());
     }
 
-//    @Override
-//    protected boolean isMovableDirection(Position start, Position nextPosition) {
-//        Direction nextDirection = Direction.of(start, nextPosition);
-//        return KING_MOVABLE_DIRECTIONS.contains(nextDirection);
-//    }
-
     @Override
     protected boolean isMovableDistance(int distance) {
         return distance == 1;
