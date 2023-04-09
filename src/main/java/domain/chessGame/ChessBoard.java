@@ -30,7 +30,7 @@ public final class ChessBoard {
         validateBeforeMovePiece(startPosition, endPosition);
 
         chessBoard.put(endPosition, chessBoard.get(startPosition));
-        chessBoard.remove(startPosition);
+        System.out.println(chessBoard.remove(startPosition));
 
         turnOfColor = turnOfColor.changeColor();
     }
@@ -119,8 +119,7 @@ public final class ChessBoard {
     }
 
     public boolean isSameWith(ChessBoard other) {
-        Map<Position, Piece> otherBoard = other.chessBoard;
-        return this.chessBoard.keySet().containsAll(otherBoard.keySet());
+        return other.chessBoard.keySet().containsAll(this.chessBoard.keySet());
     }
 
     public Map<Position, Piece> getBlackPieces() {

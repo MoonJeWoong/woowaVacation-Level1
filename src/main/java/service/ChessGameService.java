@@ -41,6 +41,7 @@ public class ChessGameService {
     }
 
     private void updateMoveResult(Position start, Position end, ChessBoard ChangedChessBoard) {
+        System.out.println(!findChessBoard().isSameWith(ChangedChessBoard));
         if (!findChessBoard().isSameWith(ChangedChessBoard)) {
             pieceDao.updatePiece(new PositionDto(start), new PositionDto(end),
                     new PieceDto(ChangedChessBoard.getPieceByPosition(end), end));
